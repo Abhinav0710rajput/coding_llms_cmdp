@@ -1,0 +1,122 @@
+{
+  "policy": "d1_0.5",
+  "budget": 0.5,
+  "val_seed": 99,
+  "val_n": 52,
+  "val_task_ids": [
+    "HumanEval/151/prompt1a",
+    "HumanEval/26/prompt1a",
+    "HumanEval/79/prompt1a",
+    "HumanEval/32/prompt1a",
+    "HumanEval/29/prompt1a",
+    "HumanEval/92/prompt1a",
+    "HumanEval/126/prompt1a",
+    "HumanEval/70/prompt1a",
+    "HumanEval/133/prompt1a",
+    "HumanEval/103/prompt1a",
+    "HumanEval/65/prompt1a",
+    "HumanEval/112/prompt1c",
+    "HumanEval/55/prompt1c",
+    "HumanEval/13/prompt1c",
+    "HumanEval/4/prompt1c",
+    "HumanEval/135/prompt1c",
+    "HumanEval/28/prompt1c",
+    "HumanEval/113/prompt1c",
+    "HumanEval/58/prompt1c",
+    "HumanEval/64/prompt1c",
+    "HumanEval/63/prompt1c",
+    "HumanEval/119/prompt1c",
+    "HumanEval/112/prompt1p",
+    "HumanEval/69/prompt1p",
+    "HumanEval/58/prompt1p",
+    "HumanEval/3/prompt1p",
+    "HumanEval/49/prompt1p",
+    "HumanEval/96/prompt1p",
+    "HumanEval/72/prompt1p",
+    "HumanEval/97/prompt1p",
+    "HumanEval/37/prompt1p",
+    "HumanEval/32/prompt1p",
+    "HumanEval/151/prompt1p",
+    "HumanEval/68/prompt2ac",
+    "HumanEval/81/prompt2ac",
+    "HumanEval/54/prompt2ac",
+    "HumanEval/149/prompt2ac",
+    "HumanEval/70/prompt2ac",
+    "HumanEval/144/prompt2ac",
+    "HumanEval/94/prompt2ac",
+    "HumanEval/14/prompt2ac",
+    "HumanEval/158/prompt2ac",
+    "HumanEval/145/prompt2ac",
+    "HumanEval/4/prompt2ac",
+    "HumanEval/59/prompt2ap",
+    "HumanEval/121/prompt2ap",
+    "HumanEval/26/prompt2ap",
+    "HumanEval/103/prompt2ap",
+    "HumanEval/65/prompt2ap",
+    "HumanEval/156/prompt2cp",
+    "HumanEval/70/prompt2cp",
+    "HumanEval/70/prompt3acp"
+  ],
+  "results": [
+    {
+      "checkpoint": "iter_0004",
+      "pass_at_1": 0.5192,
+      "avg_questions": 0.9231,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0009",
+      "pass_at_1": 0.5192,
+      "avg_questions": 0.9231,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0019",
+      "pass_at_1": 0.5577,
+      "avg_questions": 0.9038,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0029",
+      "pass_at_1": 0.5577,
+      "avg_questions": 0.7692,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0039",
+      "pass_at_1": 0.6923,
+      "avg_questions": 0.7115,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0049",
+      "pass_at_1": 0.6154,
+      "avg_questions": 0.7115,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0059",
+      "pass_at_1": 0.6538,
+      "avg_questions": 0.5577,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0069",
+      "pass_at_1": 0.5577,
+      "avg_questions": 0.3077,
+      "satisfies_budget": true
+    },
+    {
+      "checkpoint": "iter_0079",
+      "pass_at_1": 0.4808,
+      "avg_questions": 0.2308,
+      "satisfies_budget": true
+    }
+  ],
+  "best": {
+    "checkpoint": "iter_0069",
+    "pass_at_1": 0.5577,
+    "avg_questions": 0.3077,
+    "satisfies_budget": true
+  }
+}

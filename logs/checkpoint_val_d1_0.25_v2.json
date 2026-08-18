@@ -1,0 +1,127 @@
+{
+  "policy": "d1_0.25",
+  "budget": 0.25,
+  "val_seed": 99,
+  "val_n": 52,
+  "val_task_ids": [
+    "HumanEval/151/prompt1a",
+    "HumanEval/26/prompt1a",
+    "HumanEval/79/prompt1a",
+    "HumanEval/32/prompt1a",
+    "HumanEval/29/prompt1a",
+    "HumanEval/92/prompt1a",
+    "HumanEval/126/prompt1a",
+    "HumanEval/70/prompt1a",
+    "HumanEval/133/prompt1a",
+    "HumanEval/103/prompt1a",
+    "HumanEval/65/prompt1a",
+    "HumanEval/112/prompt1c",
+    "HumanEval/55/prompt1c",
+    "HumanEval/13/prompt1c",
+    "HumanEval/4/prompt1c",
+    "HumanEval/135/prompt1c",
+    "HumanEval/28/prompt1c",
+    "HumanEval/113/prompt1c",
+    "HumanEval/58/prompt1c",
+    "HumanEval/64/prompt1c",
+    "HumanEval/63/prompt1c",
+    "HumanEval/119/prompt1c",
+    "HumanEval/112/prompt1p",
+    "HumanEval/69/prompt1p",
+    "HumanEval/58/prompt1p",
+    "HumanEval/3/prompt1p",
+    "HumanEval/49/prompt1p",
+    "HumanEval/96/prompt1p",
+    "HumanEval/72/prompt1p",
+    "HumanEval/97/prompt1p",
+    "HumanEval/37/prompt1p",
+    "HumanEval/32/prompt1p",
+    "HumanEval/151/prompt1p",
+    "HumanEval/68/prompt2ac",
+    "HumanEval/81/prompt2ac",
+    "HumanEval/54/prompt2ac",
+    "HumanEval/149/prompt2ac",
+    "HumanEval/70/prompt2ac",
+    "HumanEval/144/prompt2ac",
+    "HumanEval/94/prompt2ac",
+    "HumanEval/14/prompt2ac",
+    "HumanEval/158/prompt2ac",
+    "HumanEval/145/prompt2ac",
+    "HumanEval/4/prompt2ac",
+    "HumanEval/59/prompt2ap",
+    "HumanEval/121/prompt2ap",
+    "HumanEval/26/prompt2ap",
+    "HumanEval/103/prompt2ap",
+    "HumanEval/65/prompt2ap",
+    "HumanEval/156/prompt2cp",
+    "HumanEval/70/prompt2cp",
+    "HumanEval/70/prompt3acp"
+  ],
+  "results": [
+    {
+      "checkpoint": "iter_0009",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0009",
+      "pass_at_1": 0.5385,
+      "avg_questions": 0.8846,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0019",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0019",
+      "pass_at_1": 0.5577,
+      "avg_questions": 0.9615,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0029",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0029",
+      "pass_at_1": 0.5769,
+      "avg_questions": 0.8269,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0039",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0039",
+      "pass_at_1": 0.5962,
+      "avg_questions": 0.6923,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0049",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0049",
+      "pass_at_1": 0.5385,
+      "avg_questions": 0.4615,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0059",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0059",
+      "pass_at_1": 0.5577,
+      "avg_questions": 0.4038,
+      "satisfies_budget": false
+    },
+    {
+      "checkpoint": "iter_0069",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0069",
+      "pass_at_1": 0.4423,
+      "avg_questions": 0.3654,
+      "satisfies_budget": false,
+      "budget_feasible": false
+    },
+    {
+      "checkpoint": "iter_0079",
+      "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0079",
+      "pass_at_1": 0.4231,
+      "avg_questions": 0.4615,
+      "satisfies_budget": false
+    }
+  ],
+  "best": {
+    "checkpoint": "iter_0069",
+    "checkpoint_path": "checkpoints/orig_prompt_v2/d1_0.25/iter_0069",
+    "pass_at_1": 0.4423,
+    "avg_questions": 0.3654,
+    "satisfies_budget": false,
+    "budget_feasible": false
+  }
+}

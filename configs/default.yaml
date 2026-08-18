@@ -1,0 +1,88 @@
+model:
+  name: Qwen/Qwen2.5-Coder-7B-Instruct
+  dtype: bfloat16
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.0
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  gradient_checkpointing: true
+  train_device: cuda:0
+  rollout_device: cuda:1
+
+environment:
+  max_turns: 6
+  max_new_tokens: 512
+  max_seq_len: 2048
+  rollout_temperature: 0.8
+  # "count"    → user simulator counts atomic questions; cost_q = N per turn
+  # "truncate" → hard single-question enforcement; cost_q always 0 or 1
+  multi_question_mode: count
+  efficiency_alpha: 0.025   # small bonus for fewer turns (tiebreaker vs waste)
+  efficiency_beta: 0.025    # small bonus for fewer questions
+
+user_simulator:
+  model: gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 300
+  max_concurrent_api: 15   # asyncio semaphore cap
+
+code_executor:
+  timeout: 10.0             # seconds per execution
+  partial_credit: true      # fraction of passing assertions if not all pass
+
+training:
+  rollout_batch_size: 32
+  ppo_epochs: 4
+  ppo_mini_batch_size: 8
+  clip_epsilon: 0.2
+  gamma: 1.0
+  gae_lambda: 0.95
+  kl_coeff: 0.25
+  target_kl: 0.05        # early-exit PPO epoch when approx_kl exceeds this
+  entropy_coeff: 0.01
+  lr_policy: 5.0e-6
+  lr_value: 1.0e-4
+  optimizer: adamw_8bit     # bitsandbytes 8-bit AdamW
+  warmup_steps: 20
+  n_iterations: 80
+  save_interval: 5
+  eval_interval: 10
+  seed: 42
+
+constraint:
+  # d1=0 → never ask; d1=1 → at most 1 question on average
+  d1: 1
+  lambda_init: 0.0
+  lambda_max: 10.0
+  lr_lambda: 0.1
+  # secondary turn-cost constraint (soft)
+  d2: 4
+  lambda2_init: 0.0
+  lambda2_max: 5.0
+  lr_lambda2: 0.005
+
+data:
+  hf_dataset: jie-jw-wu/HumanEvalComm
+  eval_size: 100             # held-out base problems
+  seed: 42
+  # degradation types to include in training
+  use_variants:
+    - prompt1a
+    - prompt1c
+    - prompt1p
+    - prompt2ac
+    - prompt2ap
+    - prompt2cp
+    - prompt3acp
+
+paths:
+  data_dir: data/processed
+  output_dir: outputs
+  checkpoint_dir: checkpoints

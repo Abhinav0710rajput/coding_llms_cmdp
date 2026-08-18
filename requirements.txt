@@ -1,0 +1,21 @@
+# Core ML
+torch>=2.3.0
+transformers>=4.44.0
+peft>=0.12.0
+datasets>=2.20.0
+accelerate>=0.33.0
+bitsandbytes>=0.43.0    # 8-bit AdamW
+
+# Config
+omegaconf>=2.3.0
+
+# OpenAI (user simulator)
+openai>=1.40.0
+
+# Evaluation / plotting
+matplotlib>=3.9.0
+
+# Utilities
+tqdm>=4.66.0
+numpy>=1.26.0
+scipy>=1.13.0
