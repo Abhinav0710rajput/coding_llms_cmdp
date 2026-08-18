@@ -20,11 +20,11 @@ src/
     augmentation.py
   environment/    # ClarificationEnv RL state machine, user simulator, code executor
     env.py        # Episode state machine (ask / answer / done transitions)
-    user_simulator.py   # Async GPT-4o-mini wrapper
-    code_executor.py    # Sandboxed Python executor → pass@1 score
+    user_simulator.py  # Async GPT-4o-mini wrapper
+    code_executor.py   # Sandboxed Python executor → pass@1 score
   models/         # Qwen2.5-Coder-7B + LoRA policy and value heads
     agent.py      # Agent class: generate, score, forward
-    value_heads.py      # ThreeHeads MLP (reward, question-cost, turn-cost)
+    value_heads.py  # ThreeHeads MLP (reward, question-cost, turn-cost)
   training/       # PPO loss, GAE, Lagrangian dual update, rollout buffer
     trainer.py    # PPOLagrangianTrainer main loop
     ppo.py        # PPO surrogate loss, GAE, KL penalty, entropy bonus
@@ -38,7 +38,7 @@ scripts/
   evaluate.py           # Evaluation entry point
   baseline_eval.py      # Untrained baseline evaluation
   checkpoint_val_eval.py  # Val-set checkpoint selection
-  smoke_test.py         # End-to-end pipeline validation
+  smoke_test.py           # End-to-end pipeline validation
 
 configs/
   default.yaml          # All hyperparameters (matches paper Table)
@@ -50,8 +50,8 @@ results/
   figures/              # Pre-generated PNG figures
 
 logs/
-  checkpoint_val_*.json   # Val-set scores per policy (used for checkpoint selection)
-  final_eval_*.jsonl      # Per-episode evaluation records for all policies
+  checkpoint_val_*.json  # Val-set scores per policy (used for checkpoint selection)
+  final_eval_*.jsonl     # Per-episode evaluation records for all policies
 ```
 
 ## Requirements
@@ -60,16 +60,17 @@ logs/
 - CUDA-capable GPU(s). Training was conducted on 2×A100-40GB.
 - An OpenAI API key (`OPENAI_API_KEY` environment variable) is required to run the GPT-4o-mini user simulator during training and evaluation.
 
-## Hardware Requirements
+## Hardware requirements
 
 | Requirement | Minimum | Recommended |
-|---|---|---|
+| --- | --- | --- |
 | GPUs | 2× A100-40GB | 2× A100-40GB |
 | CPU RAM | 64 GB | 128 GB |
 | Disk | 50 GB free | 100 GB free |
-| Internet | Required (HuggingFace + OpenAI API) | - |
+| Internet | Required (Hugging Face + OpenAI API) | - |
 
 **GPU layout:**
+
 - `cuda:0` - Policy training (Qwen2.5-Coder-7B + LoRA + value heads + optimizer, ~19 GB)
 - `cuda:1` - Rollout inference + frozen reference model (~17 GB)
 
@@ -109,17 +110,18 @@ AutoTokenizer.from_pretrained('Qwen/Qwen2.5-Coder-7B-Instruct')
 AutoModelForCausalLM.from_pretrained('Qwen/Qwen2.5-Coder-7B-Instruct', torch_dtype='bfloat16')
 "
 ```
-## Trained Model Checkpoints
+
+## Trained model checkpoints
 
 ### Hugging Face
 
 | Budget | Model | Description |
-|--------|-------|-------------|
+| --- | --- | --- |
 | `d1=0` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0) | Never asks - guesses from degraded spec alone |
 | `d1=0.5` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0p5) | Asks sparingly - at most 0.5 questions on average |
 | `d1=1` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-1) | Asks when worth it - at most 1 question on average |
 
-### Local Checkpoints
+### Local checkpoints
 
 All checkpoints are saved under `checkpoints/` (gitignored):
 
@@ -142,6 +144,7 @@ checkpoints/
     ├── best/
     └── final/
 ```
+
 ### Training
 
 Train a single policy at question-count budget `d1`:
@@ -202,7 +205,7 @@ Validate the end-to-end pipeline with a single episode before a full training ru
 python scripts/smoke_test.py
 ```
 
-## Trained checkpoints
+## Checkpoint availability
 
 Trained model checkpoints are available upon request via OpenReview / ARR messaging. They are not included in this anonymous code release.
 
@@ -210,14 +213,14 @@ Pre-computed evaluation logs for all 10 trained policies and the baseline are in
 
 ## Dataset
 
-The dataset is **HumanEvalComm** - 164 Python coding problems from HumanEval, each with multiple degraded versions of the problem specification.
+The dataset is **HumanEvalComm**: 164 Python coding problems from HumanEval, each with multiple degraded versions of the problem specification.
 
-**It is automatically downloaded from HuggingFace** the first time you run training or evaluation. No manual download is needed.
+**It is automatically downloaded from Hugging Face** the first time you run training or evaluation. No manual download is needed.
 
 **What the degradations look like:**
 
 | Type | Field | What changes |
-|---|---|---|
+| --- | --- | --- |
 | Ambiguity | `prompt1a` | Specific values replaced with vague terms ("by 1" → "by a number") |
 | Inconsistency | `prompt1c` | Examples contradict the description |
 | Incompleteness | `prompt1p` | All examples and details stripped; only a stub remains |
@@ -229,6 +232,7 @@ The dataset is **HumanEvalComm** - 164 Python coding problems from HumanEval, ea
 **Train/test split:** The split is **stratified** at the base problem level - problems are grouped by their rarest available variant, then each group is split proportionally (~60% eval, ~40% train). This guarantees all 7 degradation types appear in both train and eval sets. All variants of a base problem go to the same set (no leakage). Enforced in `src/data/dataset.py`.
 
 **Which variants are used for training** is controlled by `data.use_variants` in the config:
+
 ```yaml
 data:
   use_variants:
@@ -246,7 +250,7 @@ data:
 All hyperparameters are in `configs/default.yaml`. Values correspond to the hyperparameter table in the paper. Key parameters:
 
 | Parameter | Key in YAML | Default |
-|---|---|---|
+| --- | --- | --- |
 | Question budget (hard constraint) | `constraint.d1` | `1.0` |
 | Turn budget (soft constraint) | `constraint.d2` | `4` |
 | Training iterations | `training.n_iterations` | `80` |
