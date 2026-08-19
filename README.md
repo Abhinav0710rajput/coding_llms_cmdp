@@ -1,15 +1,16 @@
 # Pareto-Optimal Clarification: Post-Training Coding LLMs via PPO-Lagrangian Budget Constraints
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
-![PyTorch 2.3+](https://img.shields.io/badge/PyTorch-2.3+-red.svg)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
+![PyTorch 2.3+](https://img.shields.io/badge/PyTorch-2.3%2B-ee4c2c.svg)
 [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Models-orange)](https://huggingface.co/acv1229)
 
 ## Overview
 
 This repository implements PPO-Lagrangian post-training for budget-constrained ask-vs-answer routing in coding LLMs, evaluated on HumanEvalComm. The agent learns when to ask clarifying questions on degraded coding specifications, subject to an explicit per-episode question-count budget enforced via a Lagrange multiplier updated by dual ascent.
 
-**Contributors:** [Abhinav Rajput](https://github.com/Abhinav0710rajput) · [Acey Vogelstein](https://github.com/acv1229) | *[NYU Center for Data Science](https://cds.nyu.edu/)*
+**Authors:** [Abhinav Rajput](https://github.com/Abhinav0710rajput) and [Acey Vogelstein](https://github.com/acv1229)<br>
+*[NYU Center for Data Science](https://cds.nyu.edu/)*
 
 ## Repository structure
 
@@ -41,7 +42,7 @@ scripts/
   smoke_test.py           # End-to-end pipeline validation
 
 configs/
-  default.yaml          # All hyperparameters (matches paper Table)
+  default.yaml          # All hyperparameters from the paper
 
 data/
   HumanEvalComm_v2.csv  # Local cache of the HumanEvalComm dataset
@@ -67,29 +68,27 @@ logs/
 | GPUs | 2× A100-40GB | 2× A100-40GB |
 | CPU RAM | 64 GB | 128 GB |
 | Disk | 50 GB free | 100 GB free |
-| Internet | Required (Hugging Face + OpenAI API) | - |
+| Internet | Required (Hugging Face and OpenAI API) | Not applicable |
 
 **GPU layout:**
 
-- `cuda:0` - Policy training (Qwen2.5-Coder-7B + LoRA + value heads + optimizer, ~19 GB)
-- `cuda:1` - Rollout inference + frozen reference model (~17 GB)
+- `cuda:0`: Policy training (Qwen2.5-Coder-7B + LoRA + value heads + optimizer, ~19 GB)
+- `cuda:1`: Rollout inference + frozen reference model (~17 GB)
 
 To change GPU assignment, edit `model.train_device` and `model.rollout_device` in `configs/default.yaml`.
 
 ## Setup
 
 ```bash
-git clone <repo-url>
-cd rl_llm_multiturn_project
+git clone https://github.com/Abhinav0710rajput/coding_llms_cmdp.git
+cd coding_llms_cmdp
 
 # Create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
-# Use requirements-exact.txt for exact reproducibility (paper experiment environment).
-# Use requirements.txt for a looser install that accepts newer compatible versions.
-pip install -r requirements-exact.txt
+pip install -r requirements.txt
 
 export OPENAI_API_KEY=<your-key>
 ```
@@ -113,15 +112,15 @@ AutoModelForCausalLM.from_pretrained('Qwen/Qwen2.5-Coder-7B-Instruct', torch_dty
 
 ## Trained model checkpoints
 
-### Hugging Face
+The trained policies are available on Hugging Face:
 
 | Budget | Model | Description |
 | --- | --- | --- |
-| `d1=0` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0) | Never asks - guesses from degraded spec alone |
-| `d1=0.5` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0p5) | Asks sparingly - at most 0.5 questions on average |
-| `d1=1` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-1) | Asks when worth it - at most 1 question on average |
+| `d1=0` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0) | Never asks; guesses from the degraded specification alone |
+| `d1=0.5` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-0p5) | Asks sparingly; averages at most 0.5 questions |
+| `d1=1` | [![](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/acv1229/rl-clarify-orig-prompt-d1-1) | Asks when useful; averages at most 1 question |
 
-### Local checkpoints
+### Local checkpoint structure
 
 All checkpoints are saved under `checkpoints/` (gitignored):
 
@@ -145,7 +144,9 @@ checkpoints/
     └── final/
 ```
 
-### Training
+Pre-computed evaluation logs for all 10 trained policies and the baseline are available in `logs/final_eval_*.jsonl`.
+
+## Training
 
 Train a single policy at question-count budget `d1`:
 
@@ -165,7 +166,7 @@ To resume a run from a checkpoint:
 python scripts/train.py --d1 1.0 --resume checkpoints/orig_prompt/d1_1.0/iter_0039
 ```
 
-### Evaluation
+## Evaluation
 
 Evaluate a trained checkpoint on the 417-problem held-out test set:
 
@@ -179,7 +180,7 @@ Full sweep over all checkpoints (reproduces the Pareto frontier):
 python scripts/evaluate.py --sweep --output_dir outputs/pareto
 ```
 
-### Checkpoint selection (required before final evaluation)
+### Checkpoint selection
 
 Select the best budget-feasible checkpoint per policy using the 52-problem val set:
 
@@ -205,12 +206,6 @@ Validate the end-to-end pipeline with a single episode before a full training ru
 python scripts/smoke_test.py
 ```
 
-## Checkpoint availability
-
-Trained model checkpoints are available upon request via OpenReview / ARR messaging. They are not included in this anonymous code release.
-
-Pre-computed evaluation logs for all 10 trained policies and the baseline are in `logs/final_eval_*.jsonl`.
-
 ## Dataset
 
 The dataset is **HumanEvalComm**: 164 Python coding problems from HumanEval, each with multiple degraded versions of the problem specification.
@@ -229,7 +224,7 @@ The dataset is **HumanEvalComm**: 164 Python coding problems from HumanEval, eac
 | Inconsistency + Incompleteness | `prompt2cp` | Both combined |
 | All three | `prompt3acp` | Ambiguity + Inconsistency + Incompleteness |
 
-**Train/test split:** The split is **stratified** at the base problem level - problems are grouped by their rarest available variant, then each group is split proportionally (~60% eval, ~40% train). This guarantees all 7 degradation types appear in both train and eval sets. All variants of a base problem go to the same set (no leakage). Enforced in `src/data/dataset.py`.
+**Train/test split:** The split is **stratified** at the base problem level. Problems are grouped by their rarest available variant, then each group is split proportionally (~60% eval, ~40% train). This guarantees all 7 degradation types appear in both train and eval sets. All variants of a base problem go to the same set (no leakage). Enforced in `src/data/dataset.py`.
 
 **Which variants are used for training** is controlled by `data.use_variants` in the config:
 
@@ -261,4 +256,4 @@ All hyperparameters are in `configs/default.yaml`. Values correspond to the hype
 
 ## License
 
-Apache License 2.0. See `LICENSE`.
+Apache License 2.0. See [LICENSE](LICENSE).
