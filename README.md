@@ -127,7 +127,7 @@ All checkpoints are saved under `checkpoints/` (gitignored):
 ```
 checkpoints/
 ├── d1_0/
-│   ├── iter_0019/          # Saved every 5 iterations
+│   ├── iter_0019/        
 │   │   ├── adapter_config.json
 │   │   ├── adapter_model.safetensors   ← LoRA weights (~80 MB)
 │   │   ├── tokenizer.json
