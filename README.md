@@ -1,4 +1,4 @@
-# Pareto-Optimal Clarification: Post-Training Coding LLMs via PPO-Lagrangian Budget Constraints
+# Pareto-Dominant Clarification: Post-Training Coding LLMs via PPO-Lagrangian Budget Constraints
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
