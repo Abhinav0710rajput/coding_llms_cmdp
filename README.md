@@ -39,6 +39,7 @@ scripts/
   evaluate.py           # Evaluation entry point
   baseline_eval.py      # Untrained baseline evaluation
   checkpoint_val_eval.py  # Val-set checkpoint selection
+  generate_splits.py    # Reproduce train/validation/test task-ID files
   smoke_test.py           # End-to-end pipeline validation
 
 configs/
@@ -46,6 +47,7 @@ configs/
 
 data/
   HumanEvalComm_v2.csv  # Local cache of the HumanEvalComm dataset
+  processed/             # Explicit deterministic split task IDs
 
 results/
   figures/              # Pre-generated PNG figures
@@ -210,7 +212,7 @@ python scripts/smoke_test.py
 
 The dataset is **HumanEvalComm**: 164 Python coding problems from HumanEval, each with multiple degraded versions of the problem specification.
 
-**It is automatically downloaded from Hugging Face** the first time you run training or evaluation. No manual download is needed.
+Training and evaluation automatically download the dataset from Hugging Face. The repository also includes the exact CSV used for the reported experiments at `data/HumanEvalComm_v2.csv`.
 
 **What the degradations look like:**
 
@@ -225,6 +227,14 @@ The dataset is **HumanEvalComm**: 164 Python coding problems from HumanEval, eac
 | All three | `prompt3acp` | Ambiguity + Inconsistency + Incompleteness |
 
 **Train/test split:** The split is **stratified** at the base problem level. Problems are grouped by their rarest available variant, then each group is split proportionally (~60% eval, ~40% train). This guarantees all 7 degradation types appear in both train and eval sets. All variants of a base problem go to the same set (no leakage). Enforced in `src/data/dataset.py`.
+
+The explicit task-ID files are committed under `data/processed/`. Regenerate them deterministically from the saved CSV with:
+
+```bash
+python scripts/generate_splits.py
+```
+
+This uses the defaults in `configs/default.yaml` (`seed: 42`, `eval_size: 100`, and all seven degradation variants), followed by the checkpoint-selection validation seed 99. It produces 302 training IDs, 52 validation IDs, and 417 test IDs. Validation and test are disjoint subsets of the 469 held-out degraded instances; the train/held-out division remains at base-problem level (64/100 base problems).
 
 **Which variants are used for training** is controlled by `data.use_variants` in the config:
 

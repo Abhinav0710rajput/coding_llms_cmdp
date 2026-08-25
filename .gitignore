@@ -1,5 +1,9 @@
 data/raw/
 data/processed/
+!data/processed/
+!data/processed/train_task_ids.txt
+!data/processed/validation_task_ids.txt
+!data/processed/test_task_ids.txt
 __pycache__/
 *.pyc
 *.pyo
